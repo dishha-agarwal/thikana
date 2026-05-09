@@ -1,4 +1,4 @@
-# Thikana
+# Thikana 
 
 Thikana is a trust-first PG and hostel discovery MVP for students. It helps students find transparent stays near college, lets owners submit properties with a simple form, supports direct WhatsApp contact, offers a practical compare page, and includes a lightweight roommate board.
 
