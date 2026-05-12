@@ -1,54 +1,54 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/db.php' ;
 
-$pageTitle = 'Listings';
-$currentPage = 'listings.php';
+$pageTitle ='Listings';
+$currentPage ='listings.php';
 
 $budget = $_GET['budget'] ?? '';
 $place = trim($_GET['place'] ?? '');
-$gender = $_GET['gender'] ?? '';
-$food = $_GET['food'] ?? '';
+$gender =$_GET['gender'] ?? '';
+$food =$_GET['food'] ?? '';
 $verifiedOnly = isset($_GET['verified']) && $_GET['verified'] === '1';
-$sort = $_GET['sort'] ?? 'verified_first';
+$sort =$_GET['sort'] ?? 'verified_first';
 $activeFilters = 0;
 
-$conditions = ["l.status = 'approved'"];
+$conditions =["l.status = 'approved'"];
 $params = [];
-$types = '';
+$types ='';
 
-if ($budget !== '') {
+if ($budget!== '') {
     $activeFilters++;
     $range = explode('-', $budget);
-    if (count($range) === 2) {
-        $minBudget = (int) $range[0];
-        $maxBudget = (int) $range[1];
+    if (count($range)===2) {
+        $minBudget =(int) $range[0];
+        $maxBudget =(int) $range[1];
         $conditions[] = 'l.rent BETWEEN ? AND ?';
-        $params[] = $minBudget;
-        $params[] = $maxBudget;
+        $params[] =$minBudget;
+        $params[] =$maxBudget;
         $types .= 'ii';
     }
 }
 
-if ($place !== '') {
+if ($place!=='') {
     $activeFilters++;
-    $conditions[] = '(l.location_area = ? OR l.nearby_college = ?)';
-    $params[] = $place;
-    $params[] = $place;
+    $conditions[] ='(l.location_area = ? OR l.nearby_college = ?)';
+    $params[] =$place;
+    $params[] =$place;
     $types .= 'ss';
 }
 
-if ($gender !== '') {
+if ($gender!=='') {
     $activeFilters++;
-    $conditions[] = 'l.gender_allowed = ?';
-    $params[] = $gender;
+    $conditions[] ='l.gender_allowed = ?';
+    $params[] =$gender;
     $types .= 's';
 }
 
-if ($food !== '') {
+if ($food!=='') {
     $activeFilters++;
     $conditions[] = 'l.food_included = ?';
-    $params[] = $food;
-    $types .= 's';
+    $params[] =$food;
+    $types .='s';
 }
 
 if ($verifiedOnly) {
@@ -57,9 +57,9 @@ if ($verifiedOnly) {
 }
 
 $orderBy = 'l.verified DESC, l.rent ASC';
-if ($sort === 'price_asc') {
-    $orderBy = 'l.rent ASC';
-} elseif ($sort === 'price_desc') {
+if ($sort ==='price_asc') {
+    $orderBy ='l.rent ASC';
+} elseif ($sort ==='price_desc') {
     $orderBy = 'l.rent DESC';
 }
 
@@ -67,20 +67,20 @@ $sql = "
     SELECT l.*, o.owner_name, o.whatsapp_number,
            (SELECT file_path FROM listing_media WHERE listing_id = l.id AND media_type = 'room' ORDER BY id ASC LIMIT 1) AS preview_image
     FROM listings l
-    INNER JOIN owners o ON o.id = l.owner_id
+    INNER JOIN owners o ON o.id =l.owner_id
     WHERE " . implode(' AND ', $conditions) . "
     ORDER BY $orderBy, l.created_at DESC
 ";
 
 $stmt = db()->prepare($sql);
-if (!empty($params)) {
+if (!empty($params)){
     $stmt->bind_param($types, ...$params);
 }
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt->execute() ;
+$result = $stmt->get_result() ;
 
 $listings = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = $result->fetch_assoc()){
     $listings[] = $row;
 }
 $stmt->close();
@@ -92,9 +92,9 @@ $placesResult = db()->query("
     SELECT DISTINCT nearby_college AS place_name FROM listings WHERE status = 'approved'
     ORDER BY place_name ASC
 ");
-if ($placesResult) {
-    while ($row = $placesResult->fetch_assoc()) {
-        $places[] = $row['place_name'];
+if ($placesResult){
+    while ($row =$placesResult->fetch_assoc()) {
+        $places[] =$row['place_name'];
     }
 }
 
