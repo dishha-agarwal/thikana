@@ -17,16 +17,14 @@ if ($allListingsResult) {
         $allListings[] = $row;
     }
 }
-
 $selectedIds = [];
-if (!empty($_GET['listing_ids']) && is_array($_GET['listing_ids'])) {
+if(!empty($_GET['listing_ids']) && is_array($_GET['listing_ids'])) {
     foreach ($_GET['listing_ids'] as $id) {
         $selectedIds[] = (int) $id;
-    }
+    } 
     $selectedIds = array_values(array_unique(array_filter($selectedIds)));
     $selectedIds = array_slice($selectedIds, 0, 3);
 }
-
 $comparisonListings = [];
 if (!empty($selectedIds)) {
     $placeholders = implode(',', array_fill(0, count($selectedIds), '?'));

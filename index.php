@@ -113,59 +113,59 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section class="section-tight">
+<section class= "section-tight">
     <div class="container">
-        <div class="quick-search">
-            <div class="section-heading">
-                <span class="eyebrow">Quick search</span>
-                <h2>Start with budget, area, and your basic needs</h2>
+        <div class= "quick-search">
+            <div class= "section-heading">
+                <span class="eyebrow">Quick search</span> 
+                <h2>Start with budget,area,and your basic needs</h2>
                 <p>Keep it simple and jump straight to the listings page with a useful filter set.</p>
             </div>
 
             <form class="filter-grid" action="<?php echo BASE_URL; ?>/listings.php" method="GET">
-                <div class="filter-field col-3">
+                <div class="filter-field col-3"> 
                     <label for="budget">Budget</label>
                     <select name="budget" id="budget">
-                        <option value="">Any budget</option>
+                        <option value="">Any budget</option> 
                         <option value="0-6000">Up to Rs 6,000</option>
-                        <option value="6001-8000">Rs 6,001 - 8,000</option>
+                        <option value="6001-8000">Rs 6,001 - 8,000</option> 
                         <option value="8001-12000">Rs 8,001 - 12,000</option>
                         <option value="12001-999999">Above Rs 12,000</option>
                     </select>
                 </div>
-                <div class="filter-field col-3">
-                    <label for="place">College or location</label>
+                <div class="filter-field col-3"> 
+                    <label for="place">College or location</label> 
                     <select name="place" id="place">
-                        <option value="">All areas</option>
+                        <option value="">All areas</option> 
                         <?php foreach ($searchPlaces as $place): ?>
                             <option value="<?php echo e($place); ?>"><?php echo e($place); ?></option>
-                        <?php endforeach; ?>
+                        <?php endforeach; ?> 
                     </select>
                 </div>
-                <div class="filter-field col-3">
+                <div class="filter-field col-3"> 
                     <label for="gender">Gender</label>
-                    <select name="gender" id="gender">
-                        <option value="">Any</option>
+                    <select name="gender" id="gender"> 
+                        <option value="">Any</option>  
                         <option value="Girls">Girls</option>
-                        <option value="Boys">Boys</option>
+                        <option value="Boys">Boys</option>  
                         <option value="Unisex">Unisex</option>
-                    </select>
+                    </select> 
                 </div>
-                <div class="filter-field col-3">
+                <div class="filter-field col-3"> 
                     <label for="food">Food included</label>
-                    <select name="food" id="food">
+                    <select name="food" id="food"> 
                         <option value="">Any</option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
-                    </select>
-                </div>
+                    </select> 
+                </div> 
                 <div class="filter-field col-12">
                     <button type="submit">Search Listings</button>
-                </div>
+                </div> 
             </form>
-        </div>
-    </div>
-</section>
+        </div> 
+    </div> 
+</section> 
 
 <section class="section">
     <div class="container">

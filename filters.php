@@ -1,21 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/db.php' ;
 
-$pageTitle ='Listings';
-$currentPage ='listings.php';
-
-$budget = $_GET['budget'] ?? '';
-$place = trim($_GET['place'] ?? '');
-$gender =$_GET['gender'] ?? '';
-$food =$_GET['food'] ?? '';
-$verifiedOnly = isset($_GET['verified']) && $_GET['verified'] === '1';
-$sort =$_GET['sort'] ?? 'verified_first';
-$activeFilters = 0;
-
-$conditions =["l.status = 'approved'"];
-$params = [];
-$types ='';
-
 if ($budget!== '') {
     $activeFilters++;
     $range = explode('-', $budget);
@@ -100,17 +85,6 @@ if ($placesResult){
 
 require_once __DIR__ . '/includes/header.php';
 ?>
-
-<section class="page-banner">
-    <div class="container">
-        <div class="surface">
-            <span class="eyebrow">Browse listings</span>
-            <h1>PGs and hostels with clearer pricing and trust signals</h1>
-            <p>Filter by budget, college, food, and verified status. Then take the next step directly on WhatsApp.</p>
-        </div>
-    </div>
-</section>
-
 <section class="section-tight">
     <div class="container listings-layout">
         <aside class="card sticky-card">
@@ -216,62 +190,3 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <?php foreach ($listings as $listing): ?>
-                    <article class="card listing-card card-soft">
-                        <div class="listing-card-image">
-                            <img src="<?php echo BASE_URL . '/' . e($listing['preview_image'] ?: 'assets/images/room-sunrise.svg'); ?>" alt="<?php echo e($listing['title']); ?>">
-                        </div>
-                        <div class="badge-row">
-                            <?php if ((int) $listing['verified'] === 1): ?>
-                                <span class="badge badge-success badge-verified">Manual verification</span>
-                            <?php endif; ?>
-                            <?php if ((int) $listing['no_hidden_charges'] === 1): ?>
-                                <span class="badge badge-primary badge-clear">No hidden charges</span>
-                            <?php endif; ?>
-                            <span class="badge badge-info"><?php echo e($listing['room_type']); ?></span>
-                        </div>
-                        <div class="listing-card-header">
-                            <div>
-                                <h3 class="listing-card-title"><?php echo e($listing['title']); ?></h3>
-                                <div class="listing-location">
-                                    <span><strong><?php echo e($listing['location_area']); ?></strong></span>
-                                    <span aria-hidden="true">&middot;</span>
-                                    <span><?php echo e($listing['nearby_college']); ?></span>
-                                </div>
-                            </div>
-                            <div class="listing-price-block">
-                                <div class="listing-price"><?php echo e(format_price($listing['rent'])); ?></div>
-                                <p class="small-text">per month</p>
-                            </div>
-                        </div>
-                        <div class="listing-feature-list">
-                            <div class="listing-feature">
-                                <strong>Food</strong>
-                                <span><?php echo e($listing['food_included']); ?></span>
-                            </div>
-                            <div class="listing-feature">
-                                <strong>Gender</strong>
-                                <span><?php echo e($listing['gender_allowed']); ?></span>
-                            </div>
-                            <div class="listing-feature">
-                                <strong>Seats</strong>
-                                <span><?php echo (int) $listing['available_seats']; ?> available</span>
-                            </div>
-                            <div class="listing-feature">
-                                <strong>Deposit</strong>
-                                <span><?php echo e(format_price($listing['security_deposit'])); ?></span>
-                            </div>
-                        </div>
-                        <p><?php echo e(excerpt($listing['description'], 140)); ?></p>
-                        <div class="button-group">
-                            <a class="btn btn-outline" href="<?php echo BASE_URL; ?>/listing-details.php?id=<?php echo (int) $listing['id']; ?>">View Details</a>
-                            <a class="btn btn-whatsapp" target="_blank" rel="noopener" href="<?php echo e(whatsapp_link($listing['whatsapp_number'], 'Hi, I found ' . $listing['title'] . ' on Thikana. Please share availability and move-in details.')); ?>">WhatsApp Owner</a>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
-</section>
-
-<?php require_once __DIR__ . '/includes/footer.php'; ?>

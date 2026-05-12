@@ -1,14 +1,14 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/db.php'; 
 
 $pageTitle = 'Submit Review';
-$currentPage = 'submit-review.php';
+$currentPage = 'submit-review.php'; 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
     $listingId = (int) ($_POST['listing_id'] ?? 0);
     $reviewerName = trim($_POST['reviewer_name'] ?? '');
     $rating = (int) ($_POST['rating'] ?? 0);
-    $reviewText = trim($_POST['review_text'] ?? '');
+    $reviewText = trim($_POST['review_text'] ?? ''); 
 
     if ($listingId <= 0 || $reviewerName === '' || $rating < 1 || $rating > 5 || $reviewText === '') {
         set_flash('error', 'Please complete the review form with a valid listing, rating, and review text.');
@@ -46,7 +46,7 @@ $selectedListingId = isset($_GET['listing_id']) ? (int) $_GET['listing_id'] : 0;
 $listings = [];
 $listingResult = db()->query("SELECT id, title FROM listings WHERE status = 'approved' ORDER BY title ASC");
 if ($listingResult) {
-    while ($row = $listingResult->fetch_assoc()) {
+    while ($row = $listingResult->fetch_assoc()) {  
         $listings[] = $row;
     }
 }
@@ -101,11 +101,11 @@ require_once __DIR__ . '/includes/header.php';
                     <input type="file" id="proof_file" name="proof_file" accept=".jpg,.jpeg,.png,.webp,.pdf" required data-file-hint="#proofHint" data-max-size-mb="5" data-extensions="jpg,jpeg,png,webp,pdf">
                     <p class="small-text" id="proofHint">No file chosen</p>
                 </div>
+            </div> 
+            <div class="form-actions"> 
+                <button type="submit">Submit Review</button> 
             </div>
-            <div class="form-actions">
-                <button type="submit">Submit Review</button>
-            </div>
-            <p class="form-status" data-form-status aria-live="polite"></p>
+            <p class="form-status" data-form-status aria-live="polite"></p> 
         </form>
 
         <aside class="details-stack">
@@ -114,11 +114,11 @@ require_once __DIR__ . '/includes/header.php';
                 <p>Your review is not published instantly. It stays pending until manual moderation is complete.</p>
             </div>
             <div class="card helper-box">
-                <h3>Helpful review angle</h3>
+                <h3>Helpful review angle</h3>  
                 <p>Students usually care most about pricing honesty, safety, food, cleanliness, and whether the media matched the real place.</p>
             </div>
         </aside>
     </div>
 </section>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>  

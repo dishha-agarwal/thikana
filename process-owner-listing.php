@@ -10,19 +10,19 @@ $phone = normalize_phone($_POST['phone'] ?? '');
 $whatsappNumber = normalize_phone($_POST['whatsapp_number'] ?? '');
 $title = trim($_POST['title'] ?? '');
 $address = trim($_POST['address'] ?? '');
-$nearbyCollege = trim($_POST['nearby_college'] ?? '');
+$nearbyCollege = trim($_POST['nearby_college'] ?? ''); 
 $locationArea = trim($_POST['location_area'] ?? '');
-$rent = (int) ($_POST['rent'] ?? 0);
+$rent = (int) ($_POST['rent'] ?? 0);   
 $securityDeposit = (int) ($_POST['security_deposit'] ?? 0);
 $foodIncluded = $_POST['food_included'] ?? 'No';
 $genderAllowed = $_POST['gender_allowed'] ?? 'Unisex';
 $roomType = trim($_POST['room_type'] ?? '');
 $availableSeats = (int) ($_POST['available_seats'] ?? 0);
-$description = trim($_POST['description'] ?? '');
+$description = trim($_POST['description'] ?? '');  
 $rules = trim($_POST['rules'] ?? '');
 $amenities = trim($_POST['amenities'] ?? '');
 $noHiddenCharges = isset($_POST['no_hidden_charges']) ? 1 : 0;
-$manualVerificationAck = isset($_POST['manual_verification_ack']);
+$manualVerificationAck = isset($_POST['manual_verification_ack']);  
 
 if (
     $ownerName === '' || $phone === '' || $whatsappNumber === '' || $title === '' || $address === '' ||
@@ -39,7 +39,7 @@ if ($noHiddenCharges !== 1 || !$manualVerificationAck) {
 }
 
 $imageExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-$imageMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+$imageMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];   
 
 $roomUpload = upload_file($_FILES['room_photo'] ?? null, 'uploads/listings', $imageExtensions, 5 * 1024 * 1024, $imageMimeTypes);
 $washroomUpload = upload_file($_FILES['washroom_photo'] ?? null, 'uploads/listings', $imageExtensions, 5 * 1024 * 1024, $imageMimeTypes);
@@ -50,7 +50,7 @@ if (!$roomUpload['success'] || !$washroomUpload['success'] || !$kitchenUpload['s
         $roomUpload['message'] ?? '',
         $washroomUpload['message'] ?? '',
         $kitchenUpload['message'] ?? '',
-    ];
+    ];   
     set_flash('error', trim(implode(' ', array_filter($messages))) ?: 'Please upload valid JPG, PNG, or WEBP photos.');
     redirect_to(BASE_URL . '/owner-list-property.php');
 }
@@ -62,7 +62,7 @@ if (isset($_FILES['property_video']) && ($_FILES['property_video']['error'] ?? U
         'uploads/listings',
         ['mp4'],
         10 * 1024 * 1024,
-        ['video/mp4', 'application/mp4']
+        ['video/mp4', 'application/mp4']         
     );
 
     if (!$videoUpload['success']) {
@@ -70,7 +70,7 @@ if (isset($_FILES['property_video']) && ($_FILES['property_video']['error'] ?? U
         redirect_to(BASE_URL . '/owner-list-property.php');
     }
 
-    $videoUploadPath = $videoUpload['path'];
+    $videoUploadPath = $videoUpload['path'];       
 }
 
 db()->begin_transaction();
@@ -90,7 +90,7 @@ try {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, 'pending')
     ");
     $listingStmt->bind_param(
-        'issssiisssisssi',
+        'issssiisssisssi',               
         $ownerId,
         $title,
         $address,
@@ -108,7 +108,7 @@ try {
         $noHiddenCharges
     );
     $listingStmt->execute();
-    $listingId = $listingStmt->insert_id;
+    $listingId = $listingStmt->insert_id;            
     $listingStmt->close();
 
     $mediaStmt = db()->prepare('INSERT INTO listing_media (listing_id, media_type, file_path) VALUES (?, ?, ?)');
@@ -121,7 +121,7 @@ try {
     $mediaStmt->bind_param('iss', $listingId, $washroomMediaType, $washroomUpload['path']);
     $mediaStmt->execute();
 
-    $kitchenMediaType = 'kitchen';
+    $kitchenMediaType = 'kitchen';                
     $mediaStmt->bind_param('iss', $listingId, $kitchenMediaType, $kitchenUpload['path']);
     $mediaStmt->execute();
 
@@ -131,7 +131,7 @@ try {
         $mediaStmt->execute();
     }
 
-    $mediaStmt->close();
+    $mediaStmt->close();             
 
     db()->commit();
     set_flash('success', 'Your property has been submitted. It will appear only after manual verification by the Thikana team.');

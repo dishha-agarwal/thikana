@@ -19,30 +19,30 @@ $listing = $listingResult->fetch_assoc();
 $stmt->close();
 
 if (!$listing) {
-    http_response_code(404);
+    http_response_code(404); 
     require_once __DIR__ . '/includes/header.php';
     ?>
     <section class="section">
-        <div class="container">
+        <div class="container"> 
             <div class="card empty-state">
                 <h1>Listing not found</h1>
                 <p>This listing may be pending, removed, or the link may be incorrect.</p>
                 <a class="btn btn-primary" href="<?php echo BASE_URL; ?>/listings.php">Back to listings</a>
-            </div>
-        </div>
+            </div>  
+        </div> 
     </section>
     <?php
     require_once __DIR__ . '/includes/footer.php';
     exit;
 }
 
-$pageTitle = $listing['title'];
-$media = get_listing_media_map($listingId);
-$rules = parse_list($listing['rules']);
-$amenities = parse_list($listing['amenities']);
+$pageTitle = $listing['title']; 
+$media = get_listing_media_map($listingId); 
+$rules = parse_list($listing['rules']); 
+$amenities = parse_list($listing['amenities']); 
 
 $reviews = [];
-$reviewStmt = db()->prepare("
+$reviewStmt = db()->prepare(" 
     SELECT *
     FROM reviews
     WHERE listing_id = ? AND approved = 1
