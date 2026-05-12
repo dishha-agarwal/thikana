@@ -230,3 +230,110 @@ require_once __DIR__ . '/includes/header.php';
 </section>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php
+require_once __DIR__ . '/includes/db.php';
+$pageTitle='Compare PGs';
+$currentPage='compare.php';
+$selectedIds=[];
+if(!empty($_GET['listing_ids']) && is_array($_GET['listing_ids'])){
+foreach($_GET['listing_ids'] as $id){$selectedIds[]=(int)$id;}
+$selectedIds=array_unique($selectedIds);
+$selectedIds=array_slice($selectedIds,0,3);
+}
+$listings=[];
+if(!empty($selectedIds)){
+$placeholders=implode(',',array_fill(0,count($selectedIds),'?'));
+$sql="SELECT * FROM listings WHERE status='approved' AND id IN ($placeholders)";
+$stmt=db()->prepare($sql);
+$types=str_repeat('i',count($selectedIds));
+$stmt->bind_param($types,...$selectedIds);
+$stmt->execute();
+$result=$stmt->get_result();
+while($row=$result->fetch_assoc()){$listings[]=$row;}
+$stmt->close();
+}
+require_once __DIR__ . '/includes/header.php';
+?>
+
+<section class="section">
+<div class="container">
+<div class="card"><h1>Compare PG Listings</h1></div>
+
+<?php if(count($listings)<2): ?>
+
+<div class="card"><h3>Select at least 2 PGs</h3></div>
+
+<?php else: ?>
+
+<div class="card">
+<table class="compare-table">
+<thead>
+<tr>
+<th>Feature</th>
+<?php foreach($listings as $listing): ?>
+<th><?php echo e($listing['title']); ?></th>
+<?php endforeach; ?>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Rent</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo e(format_price($listing['rent'])); ?></td>
+<?php endforeach; ?>
+</tr>
+
+<tr>
+<td>Deposit</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo e(format_price($listing['security_deposit'])); ?></td>
+<?php endforeach; ?>
+</tr>
+
+<tr>
+<td>Food</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo e($listing['food_included']); ?></td>
+<?php endforeach; ?>
+</tr>
+
+<tr>
+<td>Room Type</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo e($listing['room_type']); ?></td>
+<?php endforeach; ?>
+</tr>
+
+<tr>
+<td>Seats</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo (int)$listing['available_seats']; ?></td>
+<?php endforeach; ?>
+</tr>
+
+<tr>
+<td>Location</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo e($listing['location_area']); ?></td>
+<?php endforeach; ?>
+</tr>
+
+<tr>
+<td>Verified</td>
+<?php foreach($listings as $listing): ?>
+<td><?php echo (int)$listing['verified']===1?'Yes':'No'; ?></td>
+<?php endforeach; ?>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<?php endif; ?>
+
+</div>
+</section>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>
